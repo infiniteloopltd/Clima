@@ -85,6 +85,11 @@ class WeatherViewController: UIViewController, CLLocationManagerDelegate {
             
             print("Lat = \(location.coordinate.latitude)")
             print("Lon = \(location.coordinate.longitude)")
+            
+            let params : [String : String] = ["lat" : String(location.coordinate.latitude),
+                                              "lon" : String(location.coordinate.longitude),
+                                              "appid" : APP_ID]
+            
         }
     }
     
