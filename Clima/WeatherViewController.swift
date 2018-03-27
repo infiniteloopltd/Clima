@@ -8,7 +8,8 @@
 
 import UIKit
 import CoreLocation
-
+import Alamofire
+import SwiftyJSON
 
 class WeatherViewController: UIViewController, CLLocationManagerDelegate {
     
@@ -46,7 +47,22 @@ class WeatherViewController: UIViewController, CLLocationManagerDelegate {
     
     //Write the getWeatherData method here:
     
-
+    func getWeatherData(url: String, parameters: [String: String]){
+        Alamofire.request(url, method: .get, parameters: parameters).responseJSON {
+            response in
+            if response.result.isSuccess {
+                print ("Success, got the weather data")
+                let weatherJson : JSON = JSON (response.result.value!)
+                print(weatherJson)
+                self.cityLabel.text = weatherJson["name"].stringValue
+                self.temperatureLabel.text = String(Int(weatherJson["main"]["temp"].doubleValue - 273.16)) + "°С"
+            }
+            else{
+                print("Error! \(response.result.error ?? "error" as! Error)")
+                self.cityLabel.text = "Network Error"
+            }
+        }
+    }
     
     
     
@@ -90,9 +106,10 @@ class WeatherViewController: UIViewController, CLLocationManagerDelegate {
                                               "lon" : String(location.coordinate.longitude),
                                               "appid" : APP_ID]
             
+            getWeatherData(url : WEATHER_URL, parameters: params)
+            
         }
     }
-    
     
     //Write the didFailWithError method here:
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
