@@ -78,10 +78,13 @@ class WeatherViewController: UIViewController, CLLocationManagerDelegate {
         
         weatherDataModel.ciry = json["name"].stringValue
         weatherDataModel.temperature = Int(json["main"]["temp"].doubleValue - 273.16)
+        weatherDataModel.condition = json["weather"][0]["id"].intValue
+        weatherDataModel.weatherIconName = weatherDataModel.updateWeatherIcon(condition: weatherDataModel.condition)
+        
         
         cityLabel.text = weatherDataModel.ciry
         temperatureLabel.text = String(weatherDataModel.temperature) + "°С"
-        
+        weatherIcon.image = UIImage(named: weatherDataModel.weatherIconName)
     }
 
     
