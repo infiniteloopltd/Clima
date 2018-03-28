@@ -75,6 +75,12 @@ class WeatherViewController: UIViewController, CLLocationManagerDelegate {
     //Write the updateWeatherData method here:
     func updateWeatherData(json : JSON)
     {
+        if (json["cod"].stringValue != "200")
+        {
+            print(json["message"].stringValue);
+            cityLabel.text = "API Error"
+            return
+        }
         
         weatherDataModel.ciry = json["name"].stringValue
         weatherDataModel.temperature = Int(json["main"]["temp"].doubleValue - 273.16)
